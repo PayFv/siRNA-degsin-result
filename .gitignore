@@ -1,0 +1,53 @@
+# Dependencies
+/node_modules/
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+/build/
+
+# Production and tooling caches
+/.vercel/
+/.turbo/
+/.cache/
+.eslintcache
+
+# Test output
+/coverage/
+/playwright-report/
+/test-results/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment files
+.env*
+!.env.example
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Temporary files
+*.tmp
+*.tmp.*
+*.temp
+*.swp
+*.swo
+*~
+
+# Editors
+/.idea/
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/settings.json
+
+# Operating system
+.DS_Store
+Thumbs.db
+Desktop.ini

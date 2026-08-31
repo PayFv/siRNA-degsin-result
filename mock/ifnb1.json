@@ -1,0 +1,190 @@
+{
+  "transcript": {
+    "id": "NM_002176.4",
+    "symbol": "IFNB1",
+    "name": "interferon beta 1",
+    "length": 600,
+    "sequence": "GGCTGCCAAGAACCTGCAGGAGGCAGAAGAATGGTACAAATCCAAGTTTGCTGACCTCTCTGAGGCTGCCAACCGGAACAATGACGCCCTGCGCCAGGCAAAGCAGGAGTCCACTGAGTACCGGAGACAGGTGCAGTCCCTCACCTGTGAAGTGGATGCCCTTAAAGGAACCAATGAGTCCCTGGAACGCCAGATGCGTGAAATGGAAGAGAACTTTGCCGTTGAAGCTGCTAACTACCAAGACACTATTGGCCGCCTGCAGGATGAGATTCAGAATATGAAGGAGGAAATGGCTCGTCACCTTCGTGAATACCAAGACCTGCTCAATGTTAAGATGGCCCTTGACATTGAGATTGCCACCTACAGGAAGCTGCTGGAAGGCGAGGAGAGCAGGATTTCTCTGCCTCTTCCAAACTTTTCCTCCCTGAACCTGAGGGAAACTAATCTGGATTCACTCCCTCTGGTTGATACCCACTCAAAAAGGACACTTCTGATTAAGACGGTTGAAACTAGAGATGGACAGGTTATCAACGAAACTTCTCAGCATCACGATGACCTTGAATAAAAATTGCACACACTCAGTGCAGCAATATATTACCA"
+  },
+  "cds": {
+    "start": 70,
+    "end": 600
+  },
+  "design": {
+    "length": 21,
+    "overhang": 2,
+    "algorithms": ["Ui-Tei", "Reynolds", "Amarzguioui"],
+    "combine": "Ui-Tei + Reynolds + Amarzguioui",
+    "specificity": {
+      "species": "Human (Homo sapiens)",
+      "database": "RefSeq release 230 (May, 2025)",
+      "hideLessSpecific": true,
+      "showOffTargetHits": true
+    },
+    "seedTmMax": 21.5,
+    "gcMin": 30,
+    "gcMax": 52,
+    "avoidContiguousGC": 4,
+    "avoidContiguousAT": 4,
+    "targetRange": {
+      "from": 70,
+      "to": 600
+    }
+  },
+  "sirnas": [
+    {
+      "id": "si-01",
+      "start": 88,
+      "end": 110,
+      "sense": "AATCCAAGUUUGCUGACCUCU",
+      "antisense": "AGGUCAGCAAACUUGGAUUUU",
+      "gc": 42.9,
+      "seedTm": 16.4,
+      "score": 0.91,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-02",
+      "start": 124,
+      "end": 146,
+      "sense": "AACCGGAACAAUGACGCCCUG",
+      "antisense": "GGGCGUCAUUGUUCCGGUUUG",
+      "gc": 57.1,
+      "seedTm": 22.8,
+      "score": 0.62,
+      "rules": { "Ui-Tei": true, "Reynolds": false, "Amarzguioui": true }
+    },
+    {
+      "id": "si-03",
+      "start": 168,
+      "end": 190,
+      "sense": "AAGCAGGAGUCCACUGAGUAC",
+      "antisense": "ACUCAGUGGACUCCUGCUUUG",
+      "gc": 52.4,
+      "seedTm": 19.1,
+      "score": 0.84,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-04",
+      "start": 211,
+      "end": 233,
+      "sense": "AAGUGGAUGCCCUUAAAGGAA",
+      "antisense": "CCUUUAAGGGCAUCCACUUUC",
+      "gc": 42.9,
+      "seedTm": 14.7,
+      "score": 0.88,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": false }
+    },
+    {
+      "id": "si-05",
+      "start": 247,
+      "end": 269,
+      "sense": "AAUGGAAGAGAACUUUGCCGU",
+      "antisense": "GGCAAAGUUCUCUUCCAUUUC",
+      "gc": 38.1,
+      "seedTm": 17.2,
+      "score": 0.86,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-06",
+      "start": 286,
+      "end": 308,
+      "sense": "AACUACCAAGACACUAUUGGC",
+      "antisense": "CAAUAGUGUCUUGGUAGUUAG",
+      "gc": 42.9,
+      "seedTm": 15.8,
+      "score": 0.79,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-07",
+      "start": 312,
+      "end": 334,
+      "sense": "AAGGUGAGAUUCAGAAUAUGA",
+      "antisense": "AUAUUCUGAAUCUCACCUUGC",
+      "gc": 33.3,
+      "seedTm": 13.9,
+      "score": 0.94,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-13",
+      "start": 320,
+      "end": 342,
+      "sense": "CUGCUCAAUGUUAAGAUGGCCCU",
+      "antisense": "AGGGCCAUCUUAACAUUGAGCAG",
+      "gc": 47.8,
+      "seedTm": 18.2,
+      "score": 0.82,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-14",
+      "start": 330,
+      "end": 352,
+      "sense": "UUAAGAUGGCCCUUGACAUUGAG",
+      "antisense": "CUCAAUGUCAAGGGCCAUCUUAA",
+      "gc": 43.5,
+      "seedTm": 20.7,
+      "score": 0.76,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-08",
+      "start": 348,
+      "end": 370,
+      "sense": "AAUGGCUCGUCACCUUCGUGA",
+      "antisense": "ACGAAGGUGACGAGCCAUUUC",
+      "gc": 52.4,
+      "seedTm": 20.4,
+      "score": 0.81,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-09",
+      "start": 381,
+      "end": 403,
+      "sense": "AAGACCUGCUCAAUGUUAAGA",
+      "antisense": "UUAACAUUGAGCAGGUCUUGG",
+      "gc": 38.1,
+      "seedTm": 16.1,
+      "score": 0.9,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-10",
+      "start": 418,
+      "end": 440,
+      "sense": "AAGAUGGCCCUUGACAUUGAG",
+      "antisense": "CAAUGUCAAGGGCCAUCUUAA",
+      "gc": 47.6,
+      "seedTm": 18.6,
+      "score": 0.87,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    },
+    {
+      "id": "si-11",
+      "start": 456,
+      "end": 478,
+      "sense": "AAGCUGCUGGAAGGCGAGGAG",
+      "antisense": "CUCGCCUUCCAGCAGCUUCCU",
+      "gc": 61.9,
+      "seedTm": 24.1,
+      "score": 0.48,
+      "rules": { "Ui-Tei": false, "Reynolds": true, "Amarzguioui": false }
+    },
+    {
+      "id": "si-12",
+      "start": 502,
+      "end": 524,
+      "sense": "AAACUUUUCCUCCCUGAACCU",
+      "antisense": "GUUCAGGGAGGAAAAGUUUGG",
+      "gc": 42.9,
+      "seedTm": 17.8,
+      "score": 0.83,
+      "rules": { "Ui-Tei": true, "Reynolds": true, "Amarzguioui": true }
+    }
+  ]
+}
