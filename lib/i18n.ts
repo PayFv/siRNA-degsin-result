@@ -1,7 +1,7 @@
 export type Locale = "zh" | "en";
 
 export const LOCALE_STORAGE_KEY = "sirna-locale";
-export const DEFAULT_LOCALE: Locale = "zh";
+export const DEFAULT_LOCALE: Locale = "en";
 
 type Vars = Record<string, string | number>;
 
@@ -11,7 +11,6 @@ const zh = {
   langZh: "中文",
   langEn: "EN",
   newDesign: "新建设计",
-  viewSampleResults: "查看示例结果",
 
   designTitle: "设计 siRNA",
   designLead:
@@ -149,10 +148,6 @@ const zh = {
   guideAntisense: "引导 / 反义链",
   designRules: "设计规则",
 
-  footerDesign: "设计表单 · 经 siDirect 2.1 代理",
-  footerLive: "实时结果 · 从 siDirect HTML 解析",
-  footerMock: "示例结果 · 未执行设计算法",
-  footerLoading: "正在加载结果",
   loadingResults: "正在加载结果…",
 } as const;
 
@@ -162,7 +157,6 @@ const en: Record<keyof typeof zh, string> = {
   langZh: "中文",
   langEn: "EN",
   newDesign: "New design",
-  viewSampleResults: "View sample results",
 
   designTitle: "Design siRNA",
   designLead:
@@ -309,10 +303,6 @@ const en: Record<keyof typeof zh, string> = {
   guideAntisense: "Guide / antisense",
   designRules: "Design rules",
 
-  footerDesign: "Design form · proxied through siDirect 2.1",
-  footerLive: "Live result · parsed from siDirect HTML",
-  footerMock: "Mock result · no design algorithm is executed",
-  footerLoading: "Loading results",
   loadingResults: "Loading results…",
 };
 
