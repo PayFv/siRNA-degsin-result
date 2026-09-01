@@ -139,6 +139,9 @@ const zh = {
   seedDuplexTm: "Seed 双链 Tm",
   functionalSirna: "功能性 siRNA",
   offTargetReduced: "脱靶降低",
+  collapsedEmptyGap: "已折叠 {rows} 行无候选 · {start}–{end}（{nt} nt）",
+  expandEmptyGap: "展开",
+  collapseEmptyGap: "收起无候选区域",
 
   passed: "通过",
   review: "复查",
@@ -296,6 +299,9 @@ const en: Record<keyof typeof zh, string> = {
   seedDuplexTm: "Seed duplex Tm",
   functionalSirna: "Functional siRNA",
   offTargetReduced: "off-target reduced",
+  collapsedEmptyGap: "Collapsed {rows} empty rows · {start}–{end} ({nt} nt)",
+  expandEmptyGap: "Expand",
+  collapseEmptyGap: "Collapse empty region",
 
   passed: "Passed",
   review: "Review",

@@ -1,5 +1,7 @@
 "use client";
 
+import { Fragment, useMemo, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 import { CandidateDetailTip } from "@/components/results/candidate-detail-tip";
 import { RuleBadges } from "@/components/results/rule-badges";
@@ -21,6 +23,9 @@ import {
   type TmBand,
 } from "@/lib/sirna-types";
 import { cn } from "@/lib/utils";
+
+/** 连续无 siRNA 行数超过该阈值时，默认折叠。 */
+const EMPTY_GAP_COLLAPSE_AFTER = 2;
 
 const tmBandClasses: Record<TmBand, string> = {
   "under-10": "bg-slate-800 text-white",
@@ -44,6 +49,17 @@ interface CandidateSegment {
   continuesFromPreviousRow: boolean;
   continuesToNextRow: boolean;
 }
+
+interface TranscriptRowData {
+  start: number;
+  end: number;
+  sequence: string;
+  segments: CandidateSegment[];
+}
+
+type RowBlock =
+  | { type: "rows"; rows: TranscriptRowData[] }
+  | { type: "gap"; key: string; rows: TranscriptRowData[] };
 
 export function TranscriptMap({
   result,
@@ -107,33 +123,212 @@ function TranscriptRows({
   compact = false,
 }: TranscriptMapProps & { basesPerRow: number; compact?: boolean }) {
   const { transcript, sirnas, cds } = result;
-  const rows = Array.from(
-    { length: Math.ceil(transcript.length / basesPerRow) },
-    (_, rowIndex) => {
-      const start = rowIndex * basesPerRow + 1;
-      const end = Math.min(start + basesPerRow - 1, transcript.length);
-      return {
-        start,
-        end,
-        sequence: transcript.sequence.slice(start - 1, end),
-        segments: getSegmentsForRow(sirnas, start, end, basesPerRow),
-      };
-    },
+  const [expandedGaps, setExpandedGaps] = useState<Set<string>>(() => new Set());
+
+  const rows = useMemo(
+    () =>
+      Array.from(
+        { length: Math.ceil(transcript.length / basesPerRow) },
+        (_, rowIndex) => {
+          const start = rowIndex * basesPerRow + 1;
+          const end = Math.min(start + basesPerRow - 1, transcript.length);
+          return {
+            start,
+            end,
+            sequence: transcript.sequence.slice(start - 1, end),
+            segments: getSegmentsForRow(sirnas, start, end, basesPerRow),
+          };
+        },
+      ),
+    [transcript.length, transcript.sequence, sirnas, basesPerRow],
   );
 
-  return rows.map((row) => (
-    <TranscriptRow
-      key={row.start}
-      row={row}
-      design={result.design}
-      cdsStart={cds.start}
-      cdsEnd={cds.end}
-      selectedId={selectedId}
-      onSelect={onSelect}
-      basesPerRow={basesPerRow}
-      compact={compact}
-    />
-  ));
+  const blocks = useMemo(() => groupRowBlocks(rows), [rows]);
+
+  const toggleGap = (key: string) => {
+    setExpandedGaps((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
+  return blocks.map((block) => {
+    if (block.type === "rows") {
+      return (
+        <Fragment key={`rows-${block.rows[0].start}`}>
+          {block.rows.map((row) => (
+            <TranscriptRow
+              key={row.start}
+              row={row}
+              design={result.design}
+              cdsStart={cds.start}
+              cdsEnd={cds.end}
+              selectedId={selectedId}
+              onSelect={onSelect}
+              basesPerRow={basesPerRow}
+              compact={compact}
+            />
+          ))}
+        </Fragment>
+      );
+    }
+
+    const expanded = expandedGaps.has(block.key);
+    return (
+      <EmptyGapBlock
+        key={block.key}
+        rows={block.rows}
+        expanded={expanded}
+        onToggle={() => toggleGap(block.key)}
+        design={result.design}
+        cdsStart={cds.start}
+        cdsEnd={cds.end}
+        selectedId={selectedId}
+        onSelect={onSelect}
+        basesPerRow={basesPerRow}
+        compact={compact}
+      />
+    );
+  });
+}
+
+function groupRowBlocks(rows: TranscriptRowData[]): RowBlock[] {
+  const blocks: RowBlock[] = [];
+  let emptyBuffer: TranscriptRowData[] = [];
+  let coveredBuffer: TranscriptRowData[] = [];
+
+  const flushCovered = () => {
+    if (coveredBuffer.length === 0) return;
+    blocks.push({ type: "rows", rows: coveredBuffer });
+    coveredBuffer = [];
+  };
+
+  const flushEmpty = () => {
+    if (emptyBuffer.length === 0) return;
+    if (emptyBuffer.length > EMPTY_GAP_COLLAPSE_AFTER) {
+      blocks.push({
+        type: "gap",
+        key: `${emptyBuffer[0].start}-${emptyBuffer[emptyBuffer.length - 1].end}`,
+        rows: emptyBuffer,
+      });
+    } else {
+      coveredBuffer.push(...emptyBuffer);
+    }
+    emptyBuffer = [];
+  };
+
+  for (const row of rows) {
+    if (row.segments.length === 0) {
+      flushCovered();
+      emptyBuffer.push(row);
+    } else {
+      flushEmpty();
+      coveredBuffer.push(row);
+    }
+  }
+  flushEmpty();
+  flushCovered();
+
+  return blocks;
+}
+
+function EmptyGapBlock({
+  rows,
+  expanded,
+  onToggle,
+  design,
+  cdsStart,
+  cdsEnd,
+  selectedId,
+  onSelect,
+  basesPerRow,
+  compact,
+}: {
+  rows: TranscriptRowData[];
+  expanded: boolean;
+  onToggle: () => void;
+  design: DesignSettings;
+  cdsStart: number;
+  cdsEnd: number;
+  selectedId: string;
+  onSelect: (id: string) => void;
+  basesPerRow: number;
+  compact: boolean;
+}) {
+  const { t } = useI18n();
+  const start = rows[0].start;
+  const end = rows[rows.length - 1].end;
+  const nt = end - start + 1;
+
+  const foldButton = (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={expanded}
+      className={cn(
+        "group flex w-full items-center gap-2 border-y border-dashed border-slate-200 bg-slate-50/80 px-3 text-left transition-colors hover:border-indigo-200 hover:bg-indigo-50/50",
+        compact ? "py-2.5" : "py-3",
+      )}
+    >
+      <span className="flex size-5 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 group-hover:border-indigo-200 group-hover:text-indigo-600">
+        {expanded ? (
+          <ChevronUp className="size-3.5" aria-hidden="true" />
+        ) : (
+          <ChevronDown className="size-3.5" aria-hidden="true" />
+        )}
+      </span>
+      <span
+        className={cn(
+          "min-w-0 flex-1 font-mono tabular-nums text-slate-500",
+          compact ? "text-[10px]" : "text-[11px]",
+        )}
+      >
+        {expanded
+          ? t("collapseEmptyGap")
+          : t("collapsedEmptyGap", {
+              rows: rows.length,
+              start,
+              end,
+              nt,
+            })}
+      </span>
+      {!expanded && (
+        <span
+          className={cn(
+            "shrink-0 font-medium text-indigo-600",
+            compact ? "text-[10px]" : "text-[11px]",
+          )}
+        >
+          {t("expandEmptyGap")}
+        </span>
+      )}
+    </button>
+  );
+
+  if (!expanded) {
+    return <div className="my-1">{foldButton}</div>;
+  }
+
+  return (
+    <div>
+      <div className="my-1">{foldButton}</div>
+      {rows.map((row) => (
+        <TranscriptRow
+          key={row.start}
+          row={row}
+          design={design}
+          cdsStart={cdsStart}
+          cdsEnd={cdsEnd}
+          selectedId={selectedId}
+          onSelect={onSelect}
+          basesPerRow={basesPerRow}
+          compact={compact}
+        />
+      ))}
+    </div>
+  );
 }
 
 function TmLegend() {
@@ -174,12 +369,7 @@ function TranscriptRow({
   basesPerRow,
   compact,
 }: {
-  row: {
-    start: number;
-    end: number;
-    sequence: string;
-    segments: CandidateSegment[];
-  };
+  row: TranscriptRowData;
   design: DesignSettings;
   cdsStart: number;
   cdsEnd: number;
