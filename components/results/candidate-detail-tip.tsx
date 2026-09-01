@@ -1,4 +1,7 @@
+"use client";
+
 import { Check, CircleAlert, X } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
 import { RuleBadges } from "@/components/results/rule-badges";
 import type {
   DesignRuleName,
@@ -20,6 +23,7 @@ export function CandidateDetailTip({
   candidate: SirnaCandidate;
   design: DesignSettings;
 }) {
+  const { t } = useI18n();
   const gcPass =
     candidate.gc >= design.gcMin && candidate.gc <= design.gcMax;
   const tmPass = candidate.seedTm <= design.seedTmMax;
@@ -50,12 +54,12 @@ export function CandidateDetailTip({
           ) : (
             <CircleAlert aria-hidden="true" className="size-3" />
           )}
-          {qualified ? "Passed" : "Review"}
+          {qualified ? t("passed") : t("review")}
         </span>
       </div>
 
       <div className="mt-4 grid grid-cols-3 divide-x divide-slate-200 border-y border-slate-200 py-3">
-        <Metric label="Score" value={candidate.score.toFixed(2)} />
+        <Metric label={t("score")} value={candidate.score.toFixed(2)} />
         <Metric
           label="GC"
           value={`${candidate.gc.toFixed(1)}%`}
@@ -69,13 +73,13 @@ export function CandidateDetailTip({
       </div>
 
       <div className="mt-4 space-y-3">
-        <Sequence label="Target / sense" sequence={candidate.sense} />
-        <Sequence label="Guide / antisense" sequence={candidate.antisense} />
+        <Sequence label={t("targetSense")} sequence={candidate.sense} />
+        <Sequence label={t("guideAntisense")} sequence={candidate.antisense} />
       </div>
 
       <div className="mt-4 flex items-center justify-between">
         <span className="text-[11px] font-medium text-slate-500">
-          Design rules
+          {t("designRules")}
         </span>
         <RuleBadges candidate={candidate} />
       </div>

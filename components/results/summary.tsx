@@ -1,4 +1,8 @@
+"use client";
+
 import { Dna, FlaskConical } from "lucide-react";
+import Link from "next/link";
+import { useI18n } from "@/components/i18n-provider";
 import type { SirnaResult } from "@/lib/sirna-types";
 
 interface SummaryProps {
@@ -6,6 +10,7 @@ interface SummaryProps {
 }
 
 export function Summary({ result }: SummaryProps) {
+  const { t } = useI18n();
   const { transcript, cds, sirnas } = result;
   const qualified = sirnas.filter(
     (candidate) =>
@@ -17,18 +22,25 @@ export function Summary({ result }: SummaryProps) {
 
   return (
     <header className="border-b border-slate-200 pb-6 sm:pb-7">
-      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600">
-        <FlaskConical aria-hidden="true" className="size-4" />
-        siRNA Design
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600">
+          <FlaskConical aria-hidden="true" className="size-4" />
+          {t("brand")}
+        </div>
+        <Link
+          href="/"
+          className="text-xs text-slate-500 outline-none hover:text-indigo-600 focus-visible:ring-2 focus-visible:ring-indigo-500"
+        >
+          {t("newDesign")}
+        </Link>
       </div>
       <div className="mt-4 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           <h1 className="text-2xl font-semibold tracking-[-0.035em] text-slate-950 sm:text-3xl">
-            {transcript.symbol} siRNA design results
+            {t("resultsTitle", { symbol: transcript.symbol })}
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-            {transcript.name}. Candidate sites are mapped against the supplied
-            transcript and evaluated with the configured design rules.
+            {t("resultsLead", { name: transcript.name })}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-slate-600 sm:text-sm">
@@ -42,11 +54,15 @@ export function Summary({ result }: SummaryProps) {
       </div>
 
       <div className="mt-5 grid grid-cols-3 gap-3 sm:mt-6 sm:flex sm:flex-wrap sm:gap-x-8 sm:gap-y-3">
-        <SummaryMetric label="Candidates" value={sirnas.length.toString()} />
-        <SummaryMetric label="Pass all rules" value={qualified.toString()} />
+        <SummaryMetric label={t("candidates")} value={sirnas.length.toString()} />
+        <SummaryMetric label={t("passAllRules")} value={qualified.toString()} />
         <SummaryMetric
-          label="Best score"
-          value={Math.max(...sirnas.map(({ score }) => score)).toFixed(2)}
+          label={t("bestScore")}
+          value={
+            sirnas.length === 0
+              ? "—"
+              : Math.max(...sirnas.map(({ score }) => score)).toFixed(2)
+          }
         />
       </div>
     </header>

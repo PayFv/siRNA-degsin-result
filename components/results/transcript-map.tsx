@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/i18n-provider";
 import { CandidateDetailTip } from "@/components/results/candidate-detail-tip";
 import { RuleBadges } from "@/components/results/rule-badges";
 import {
@@ -49,6 +50,8 @@ export function TranscriptMap({
   selectedId,
   onSelect,
 }: TranscriptMapProps) {
+  const { t } = useI18n();
+
   return (
     <section
       aria-labelledby="transcript-map-heading"
@@ -56,19 +59,17 @@ export function TranscriptMap({
     >
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-600">
-          Sequence context
+          {t("sequenceContext")}
         </p>
         <h2
           id="transcript-map-heading"
           className="mt-1 text-lg font-semibold tracking-tight text-slate-950"
         >
-          Graphical view of effective siRNA candidates
+          {t("graphicalView")}
         </h2>
         <p className="mt-1 text-xs text-slate-500">
-          Transcript is wrapped every{" "}
-          <span className="sm:hidden">50</span>
-          <span className="hidden sm:inline">100</span> nt. Overlapping
-          candidates are stacked on separate lanes.
+          <span className="sm:hidden">{t("wrapHelp", { n: 50 })}</span>
+          <span className="hidden sm:inline">{t("wrapHelp", { n: 100 })}</span>
         </p>
       </div>
 
@@ -136,16 +137,17 @@ function TranscriptRows({
 }
 
 function TmLegend() {
+  const { t } = useI18n();
   const items: Array<{ label: string; band: TmBand }> = [
     { label: "< 10°C", band: "under-10" },
     { label: "< 15°C", band: "under-15" },
     { label: "< 21.5°C", band: "under-21.5" },
-    { label: "Functional siRNA", band: "functional" },
+    { label: t("functionalSirna"), band: "functional" },
   ];
 
   return (
     <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-slate-500">
-      <span className="font-medium text-slate-700">Seed duplex Tm</span>
+      <span className="font-medium text-slate-700">{t("seedDuplexTm")}</span>
       {items.map(({ label, band }) => (
         <span key={band} className="inline-flex items-center gap-2">
           <span
@@ -157,7 +159,7 @@ function TmLegend() {
           {label}
         </span>
       ))}
-      <span className="text-slate-400">off-target reduced</span>
+      <span className="text-slate-400">{t("offTargetReduced")}</span>
     </div>
   );
 }

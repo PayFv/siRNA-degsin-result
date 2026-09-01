@@ -10,9 +10,11 @@ import type { SirnaResult } from "@/lib/sirna-types";
 export function ResultsView({ result }: { result: SirnaResult }) {
   const initialSelection = useMemo(
     () =>
-      result.sirnas.reduce((best, candidate) =>
-        candidate.score > best.score ? candidate : best,
-      ).id,
+      result.sirnas.reduce(
+        (best, candidate) =>
+          !best || candidate.score > best.score ? candidate : best,
+        result.sirnas[0],
+      )?.id ?? "",
     [result.sirnas],
   );
   const [selectedId, setSelectedId] = useState(initialSelection);

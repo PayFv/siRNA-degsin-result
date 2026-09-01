@@ -2,6 +2,7 @@
 
 import type { KeyboardEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
 import { RuleBadges } from "@/components/results/rule-badges";
 import type { DesignSettings, SirnaCandidate } from "@/lib/sirna-types";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ export function CandidateTable({
   selectedId,
   onSelect,
 }: CandidateTableProps) {
+  const { t } = useI18n();
   const selectWithKeyboard = (
     event: KeyboardEvent<HTMLTableRowElement>,
     id: string,
@@ -37,20 +39,20 @@ export function CandidateTable({
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-600">
-            Ranked output
+            {t("rankedOutput")}
           </p>
           <h2
             id="candidate-table-heading"
             className="mt-1 text-lg font-semibold tracking-tight text-slate-950"
           >
-            Effective siRNA candidates
+            {t("effectiveCandidates")}
           </h2>
           <p className="mt-1 text-xs text-slate-500">
-            Select a row to locate the candidate on the transcript.
+            {t("selectRow")}
           </p>
         </div>
         <p className="text-xs tabular-nums text-slate-400">
-          {candidates.length} candidates
+          {t("candidatesCount", { count: candidates.length })}
         </p>
       </div>
 
@@ -109,15 +111,15 @@ export function CandidateTable({
         <table className="w-full min-w-[1050px] border-collapse text-left">
           <thead className="bg-slate-50 text-[11px] font-medium text-slate-500">
             <tr>
-              <th className="px-4 py-3">Position</th>
-              <th className="px-4 py-3">Target sequence</th>
-              <th className="px-4 py-3">Guide (5′→3′)</th>
-              <th className="px-4 py-3">Rules</th>
+              <th className="px-4 py-3">{t("position")}</th>
+              <th className="px-4 py-3">{t("targetSequence")}</th>
+              <th className="px-4 py-3">{t("guide53")}</th>
+              <th className="px-4 py-3">{t("rules")}</th>
               <th className="px-4 py-3 text-right">GC</th>
               <th className="px-4 py-3 text-right">Seed Tm</th>
-              <th className="px-4 py-3 text-right">Score</th>
+              <th className="px-4 py-3 text-right">{t("score")}</th>
               <th className="w-10 px-2 py-3">
-                <span className="sr-only">Selected</span>
+                <span className="sr-only">{t("selected")}</span>
               </th>
             </tr>
           </thead>

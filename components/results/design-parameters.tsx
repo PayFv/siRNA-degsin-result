@@ -1,4 +1,7 @@
+"use client";
+
 import { Check, Database } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
 import type { DesignSettings } from "@/lib/sirna-types";
 
 interface DesignParametersProps {
@@ -6,12 +9,13 @@ interface DesignParametersProps {
 }
 
 export function DesignParameters({ design }: DesignParametersProps) {
+  const { t } = useI18n();
   const keyParameters = [
-    { label: "Combined rule", value: design.combine },
-    { label: "Seed Tm ceiling", value: `≤ ${design.seedTmMax} °C` },
-    { label: "GC content", value: `${design.gcMin}–${design.gcMax}%` },
+    { label: t("combinedRuleLabel"), value: design.combine },
+    { label: t("seedTmCeiling"), value: `≤ ${design.seedTmMax} °C` },
+    { label: t("gcContent"), value: `${design.gcMin}–${design.gcMax}%` },
     {
-      label: "Target range",
+      label: t("targetRange"),
       value: `${design.targetRange.from}–${design.targetRange.to}`,
     },
   ];
@@ -24,17 +28,17 @@ export function DesignParameters({ design }: DesignParametersProps) {
       <div className="flex items-end justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-600">
-            Input context
+            {t("inputContext")}
           </p>
           <h2
             id="design-parameters-heading"
             className="mt-1 text-lg font-semibold tracking-tight text-slate-950"
           >
-            Design parameters
+            {t("designParameters")}
           </h2>
         </div>
         <span className="hidden text-xs text-slate-400 sm:block">
-          Values supplied with the result JSON
+          {t("valuesFromJson")}
         </span>
       </div>
 
@@ -58,7 +62,7 @@ export function DesignParameters({ design }: DesignParametersProps) {
 
       <div className="mt-5 grid gap-x-12 gap-y-4 text-sm md:grid-cols-2">
         <ParameterRow
-          label="Specificity check"
+          label={t("specificityCheck")}
           value={
             <span className="inline-flex items-center gap-2">
               <Database aria-hidden="true" className="size-3.5 text-slate-400" />
@@ -67,25 +71,28 @@ export function DesignParameters({ design }: DesignParametersProps) {
           }
         />
         <ParameterRow
-          label="Duplex"
-          value={`${design.length} nt + ${design.overhang} nt overhang`}
+          label={t("duplex")}
+          value={t("duplexValue", {
+            length: design.length,
+            overhang: design.overhang,
+          })}
         />
         <ParameterRow
-          label="Avoid contiguous bases"
+          label={t("avoidContiguous")}
           value={`G/C ≥ ${design.avoidContiguousGC} nt · A/T ≥ ${design.avoidContiguousAT} nt`}
         />
         <ParameterRow
-          label="Specificity filters"
-          value={`${design.specificity.hideLessSpecific ? "Hide less-specific" : "Show all"} · ${
+          label={t("specificityFilters")}
+          value={`${design.specificity.hideLessSpecific ? t("hideLessSpecificShort") : t("showAll")} · ${
             design.specificity.showOffTargetHits
-              ? "Show off-target hits"
-              : "Hide off-target hits"
+              ? t("showHits")
+              : t("hideHits")
           }`}
         />
       </div>
 
       <div className="mt-5 flex flex-wrap items-center gap-2">
-        <span className="mr-1 text-xs text-slate-500">Enabled algorithms</span>
+        <span className="mr-1 text-xs text-slate-500">{t("enabledAlgorithms")}</span>
         {design.algorithms.map((algorithm) => (
           <span
             key={algorithm}

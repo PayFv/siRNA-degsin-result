@@ -37,6 +37,13 @@ export interface DesignSettings {
   };
 }
 
+export interface OffTargetHits {
+  minMismatchGuide: number;
+  minMismatchPassenger: number;
+  guide: [number, number, number, number];
+  passenger: [number, number, number, number];
+}
+
 export interface SirnaCandidate {
   id: string;
   start: number;
@@ -47,6 +54,7 @@ export interface SirnaCandidate {
   seedTm: number;
   score: number;
   rules: Record<DesignRuleName, boolean>;
+  offTarget?: OffTargetHits;
 }
 
 export interface SirnaResult {
